@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="col-sm-8">
+    <h1>
+        Просмотр данных пользователя
+    </h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <td>Логин</td>
+                <td>{{ user.login }}</td>
+            </tr>
+            <tr>
+                <td>Фамилия</td>
+                <td>{{ user.last_name }}</td>
+            </tr>
+            <tr>
+                <td>Имя</td>
+                <td>{{ user.first_name }}</td>
+            </tr>
+            <tr>
+                <td>Отчество</td>
+                <td>{{ user.middle_name or '' }}</td>
+            </tr>
+            <tr>
+                <td>Дата регистрации</td>
+                <td>{{ user.created_at }}</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+
+{% endblock %}

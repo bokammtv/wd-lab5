@@ -1,0 +1,23 @@
+{% macro render_pagination(endpoint, page, total_pages, user_id, window=3) %}
+
+<nav aria-label="Page navigation example">
+    <ul class="pagination justify-content-center">
+      <li class="page-item{% if page == 1 %} disabled{% endif %}">
+        <a class="page-link" href="{{ url_for(endpoint, page=page-1, user_id=user_id) }}" aria-label="Previous">
+          <span aria-hidden="true">&laquo;</span>
+        </a>
+      </li>
+      {% set start = page - window if page - window > 0 else 1 %}
+      {% set end = page + window if page + window <= total_pages else total_pages %}
+      {% for page_num in range(start, end + 1) %}
+      <li class="page-item{% if page_num == page %} active{% endif %}"><a class="page-link" href="{{ url_for(endpoint, page=page_num, user_id=user_id) }}">{{ page_num }}</a></li>
+      {% endfor %}
+      <li class="page-item{% if page == total_pages %} disabled{% endif %}">
+        <a class="page-link" href="{{ url_for(endpoint, page=page+1, user_id=user_id) }}" aria-label="Next">
+          <span aria-hidden="true">&raquo;</span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+{% endmacro %}

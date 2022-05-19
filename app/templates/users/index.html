@@ -1,0 +1,71 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1>Список пользователей</h1>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>№</th>
+            <th>ФИО</th>
+            <th>Роль</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+        <tr>
+            <td>{{ loop.index }}</td>
+            <td class="full-user-name">{{ user.last_name }} {{ user.first_name }} {{ user.middle_name or ''}}</td>
+            <td>{{ user.role_name or '' }}</td>
+            <td>
+                <div class="btn-group">
+                    {% if current_user.is_authenticated %}
+                        {% if current_user.can('show', record=user) %}
+                            <a class="btn btn-primary" href="{{ url_for('show', user_id=user.id) }}">Просмотр</a>
+                        {% endif %}
+                        {% if current_user.can('update', record=user) %}
+                            <a class="btn btn-secondary" href="{{ url_for('edit', user_id=user.id) }}">Редактирование</a>
+                        {% endif %}
+                        {% if current_user.can('delete', record=user) %}
+                            <button type="button" class="btn btn-danger" data-url="{{ url_for('delete', user_id=user.id) }}"
+                                data-bs-toggle="modal" data-bs-target="#delete-user-modal">
+                                Удалить
+                            </button>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% if current_user.is_authenticated and current_user.can('create') %}
+<a class="btn btn-primary" href="{{ url_for('new') }}">Создать пользователя</a>
+{% endif %}
+
+
+<div class="modal fade" id="delete-user-modal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Удаление пользователя</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Вы уверены, что хотите удалить пользователя <span id="user-name"></span>?
+                <form action="" method="POST">
+                    <input id="delete-btn" class="d-none" type="submit">
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">НЕТ</button>
+                <label  class="btn btn-danger" for="delete-btn">Да!</label>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

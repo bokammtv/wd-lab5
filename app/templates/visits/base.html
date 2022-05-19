@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<h1 class="my-3 text-center">Статистика действий пользователя</h1>
+
+<ul class="nav nav-tabs">
+    <li class="nav-item">
+        <a class="nav-link {% if request.endpoint == 'visits.logs' %}active {% endif %}" aria-current="page" href="{{ url_for('visits.logs', user_id=current_user.id) }}">Журнал посещений</a>
+    </li>
+    {% if current_user.is_admin %}
+    
+    <li class="nav-item">
+        <a class="nav-link {% if request.endpoint == 'visits.pages_stat' %}active {% endif %}" href="{{ url_for('visits.pages_stat') }}">Статистика по страницам</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link {% if request.endpoint == 'visits.users_stat' %}active {% endif %}" href="{{ url_for('visits.users_stat') }}">Статистика по пользователям</a>
+    </li>
+    {% endif %}
+</ul>
+
+<div class="mt-5">
+    {% block tab_content %}
+    {% endblock %}
+</div>
+
+
+{% endblock %}
